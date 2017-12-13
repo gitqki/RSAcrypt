@@ -1,52 +1,69 @@
-/*
-Initial Release
- */
-
 import java.util.Scanner;
 
-public abstract class Main {
-    static Integer FN;
-    static Integer p;
-    static Integer q;
-    static Integer e;
-    static Integer n;
-    static Integer rest;
-
+public class Main {
     public static void main(String[] args) {
-        Scanner reader = new Scanner(System.in);
-        System.out.println("Wählen sie zwei Primzahlen");
+        System.out.println("Bitte eine Primzahl eingeben!");
+        Scanner sc = new Scanner(System.in);
+        int p;
+        while (true) {
+            while (!sc.hasNextInt()) sc.next();
+            p = sc.nextInt();
+            if (isPrime(p)) {
+                break;
+            }
+            System.out.println("Zahl ist keine Primzahl! Bitte eine Primzahl eingeben!");
+        }
 
-        /*
-        Starte den Input reader, um die Zahlen zu erfassen
-         */
-        p = reader.nextInt();
-        q = reader.nextInt();
+        int q;
+        System.out.println("Bitte eine weitere Primzahl eingeben!");
+        while (true) {
+            while (!sc.hasNextInt()) sc.next();
+            q = sc.nextInt();
+            if (isPrime(q)) {
+                break;
+            }
+            System.out.println("Zahl ist keine Primzahl! Bitte eine Primzahl eingeben!");
+        }
+        int n = p * q;
+        int phi = (q-1)*(p-1);
 
+        int e;
+        System.out.println("Bitte eine Zahl eingeben die zwischen " + 1 + " und " + phi + " liegt und Teilfremd zu " + phi + " ist.");
+        while (true) {
+            while (!sc.hasNextInt()) sc.next();
+            e = sc.nextInt();
+            // Teilerfremd wenn ggT 1 ist
+            if(ggT(phi,e) == 1){
+                break;
+            }
+            System.out.println("Zahl ist nicht Teilerfremd!");
+        }
 
-        System.out.println("Ihre Primzahlen sind \np: " + p + " \nund q: " + q);
-
-        /*
-        Berechnung der Euleschen Funktion
-         */
-        FN = (p-1)*(q-1);
-        System.out.println("Die eulesche Funktion ergibt: " + FN);
-        System.out.println("Geben sie nun eine teilfremde Zahl zur euleschen Funktion ein: ");
-
-        /*
-        Erfasse eine Teilfremde Zahl
-         */
-        e = reader.nextInt();
-        reader.close();
-        System.out.println("Ihre teilfremde Zahl ist: " + e);
-
-        /*
-        Berechnung des Inversen d zu e
-         */
-        eukl(FN, e);
-
-
-
+        int[] ew = eukl(phi,e);
+        System.out.println("Public Key: (" + e + ", " + n + ")");
+        System.out.println("Private Key: (" + ew[2] + ", " + n + ")");
     }
+
+    /**
+     * Check if prime number
+     * @param n
+     * @return
+     */
+    public static boolean isPrime(int n) {
+
+        if (n % (n / 2) == 0) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Extended Euclidean algorithm
+     *
+     * @param phi
+     * @param e
+     * @return
+     */
     public static int[] eukl(int phi, int e){
         if(e == 0){
             int[] ret = {phi,1,0};
@@ -55,9 +72,23 @@ public abstract class Main {
             int[] dst = eukl(e, phi%e);
             int newT = dst[1]-(phi/e)*dst[2];
             int[] newDst = {dst[0], dst[2], newT};
-            System.out.println(newDst);
+
             return newDst;
         }
     }
-}
 
+    /**
+     * ggT
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    public static int ggT(int a, int b){
+        if(b == 0){
+            return a;
+        } else {
+            return ggT(b, a % b);
+        }
+    }
+}
