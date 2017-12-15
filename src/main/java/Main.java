@@ -5,12 +5,13 @@ Initial Release
 import java.util.Scanner;
 
 public class Main {
-    static Integer FN;
+    static Integer phi;
     static Integer p;
     static Integer q;
     static Integer e;
     static Integer n;
     static Integer rest;
+    static boolean isPrime;
 
     public static void main(String[] args) {
         Scanner reader = new Scanner(System.in);
@@ -22,14 +23,19 @@ public class Main {
         p = reader.nextInt();
         q = reader.nextInt();
 
+        /*
+        Prüfe, ob die Eingaben Primzahlen sind
+         */
+        isPimaryNumber(p);
+        isPimaryNumber(q);
 
         System.out.println("Ihre Primzahlen sind \np: " + p + " \nund q: " + q);
 
         /*
         Berechnung der Euleschen Funktion
          */
-        FN = (p-1)*(q-1);
-        System.out.println("Die eulesche Funktion ergibt: " + FN);
+        phi = (p-1)*(q-1);
+        System.out.println("Die eulesche Funktion ergibt: " + phi);
         System.out.println("Geben sie nun eine teilfremde Zahl zur euleschen Funktion ein: ");
 
         /*
@@ -42,11 +48,24 @@ public class Main {
         /*
         Berechnung des Inversen d zu e
          */
-        eukl(FN, e);
+        eukl(phi, e);
 
 
 
     }
+    public static void isPimaryNumber(int n){
+        for(int i=2;i<=n/2;i++)
+        {
+            n=n%i;
+            if(n==0)
+            {
+                System.out.println("Bitte nur Primzahlen!");
+                System.exit(0);
+            }
+
+        }
+    }
+
     public static int[] eukl(int phi, int e){
         if(e == 0){
             int[] ret = {phi,1,0};
