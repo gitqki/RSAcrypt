@@ -4,7 +4,7 @@ Initial Release
 
 import java.util.Scanner;
 
-public abstract class Main {
+public class Main {
     static Integer FN;
     static Integer p;
     static Integer q;
@@ -55,7 +55,6 @@ public abstract class Main {
             int[] dst = eukl(e, phi%e);
             int newT = dst[1]-(phi/e)*dst[2];
             int[] newDst = {dst[0], dst[2], newT};
-            System.out.println(newDst);
             return newDst;
         }
     }
