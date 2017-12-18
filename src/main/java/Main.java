@@ -2,80 +2,103 @@
 Initial Release
  */
 
+import java.util.Arrays;
 import java.util.Scanner;
+import java.util.Random;
 
 public class Main {
-    static Integer phi;
-    static Integer p;
-    static Integer q;
-    static Integer e;
-    static Integer n;
-    static Integer rest;
-    static boolean isPrime;
+    static long rand;
+    static long phi;
+    static long p;
+    static long q;
+    static long e;
+    static long[] d;
+    static boolean isPrime = false;
 
     public static void main(String[] args) {
-        Scanner reader = new Scanner(System.in);
+        //Scanner reader = new Scanner(System.in);
         System.out.println("Wählen sie zwei Primzahlen");
 
         /*
         Starte den Input reader, um die Zahlen zu erfassen
          */
-        p = reader.nextInt();
-        q = reader.nextInt();
+        p = randPrime(100000,200000);
+        //p = reader.nextInt();
 
         /*
         Prüfe, ob die Eingaben Primzahlen sind
          */
-        isPimaryNumber(p);
-        isPimaryNumber(q);
+        //isPimaryNumber(p);
+        //System.out.println("Ihre erste Primzahl ist: "  + p + "\ngeben sie die nächste Primzahl ein.");
+        q = randPrime(1,100000);
+        //q = reader.nextInt();
+        //isPimaryNumber(q);
 
-        System.out.println("Ihre Primzahlen sind \np: " + p + " \nund q: " + q);
+        //System.out.println("Ihre zweite Primzahl ist: " + q);
 
         /*
         Berechnung der Euleschen Funktion
          */
-        phi = (p-1)*(q-1);
-        System.out.println("Die eulesche Funktion ergibt: " + phi);
-        System.out.println("Geben sie nun eine teilfremde Zahl zur euleschen Funktion ein: ");
+        System.out.println("\np: " + p + "\nq: " + q + "\nPhi: " + (p-1)*(q-1));
+        phi = (p - 1) * (q - 1);
+        //System.out.println("Die eulesche Funktion ergibt: " + phi);
+        //System.out.println("Geben sie nun eine teilfremde Zahl zur euleschen Funktion ein: ");
 
         /*
         Erfasse eine Teilfremde Zahl
          */
-        e = reader.nextInt();
-        reader.close();
-        System.out.println("Ihre teilfremde Zahl ist: " + e);
+        e = randPrime(q,p);
+        //e = reader.nextInt();
+        //isPimaryNumber(e);
+        //reader.close();
+        System.out.println("Teilfremde Zahl: " + e);
 
         /*
         Berechnung des Inversen d zu e
          */
-        eukl(phi, e);
-
-
+        if (!isPrime) {System.exit(1);}
+        else {
+            d = eukl(phi, e);
+            System.out.println("Öffentlicher Schlüssel: " + e + " " + phi);
+            while (d[2] < 0) {
+                d[2] = d[2] + phi;
+            }
+            System.out.println("Privater Schlüssel: " + d[2] + " " + phi);
+        }
 
     }
-    public static void isPimaryNumber(int n){
-        for(int i=2;i<=n/2;i++)
-        {
-            n=n%i;
-            if(n==0)
-            {
-                System.out.println("Bitte nur Primzahlen!");
-                System.exit(0);
+    public static void isPimaryNumber(long n){
+        for (long p = 2; p < n; p++) {
+            if (n % p == 0 || n <= 0) {
+                isPrime = false;
+                break;
+            } else {
+                isPrime = true;
             }
-
         }
     }
 
-    public static int[] eukl(int phi, int e){
+    public static long[] eukl(long phi, long e){
         if(e == 0){
-            int[] ret = {phi,1,0};
+            long[] ret = {phi,1,0};
             return ret;
         } else {
-            int[] dst = eukl(e, phi%e);
-            int newT = dst[1]-(phi/e)*dst[2];
-            int[] newDst = {dst[0], dst[2], newT};
+            long[] dst = eukl(e, phi%e);
+            long newT = dst[1]-(phi/e)*dst[2];
+            long[] newDst = {dst[0], dst[2], newT};
             return newDst;
         }
+    }
+    public static long randPrime(long min, long max) {
+        isPrime = false;
+        Random rn = new Random();
+        long range = max - min + 1;
+        long randomNum = 0;
+        while (!isPrime) {
+            randomNum = (rn.nextLong() % (max - min)) + min;
+            isPimaryNumber(randomNum);
+        }
+        return randomNum;
     }
 }
 

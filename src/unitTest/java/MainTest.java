@@ -4,13 +4,19 @@ import static org.junit.Assert.*;
 
 public class MainTest {
     @Test
-    public void TestClass() {
+    public void TestPhiAndE() {
         Main App = new Main();
-        int phi = 120;
-        int e = 17;
+        long phi = 120;
+        long e = 17;
 
-        int[] test = App.eukl(phi,e);
+        long[] test = App.eukl(phi,e);
 
         assertEquals(-7,test[2]);
+    }
+    public void TestRandomPrime() {
+        Main App = new Main();
+
+        long test = App.randPrime(0,100000);
+
     }
 }
